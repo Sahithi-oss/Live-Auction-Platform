@@ -118,7 +118,7 @@ MongoDB Database
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/live-auction-platform.git
+git clone https://github.com/Sahithi-oss/live-auction-platform.git
 ```
 
 ## Navigate to the Project Folder
