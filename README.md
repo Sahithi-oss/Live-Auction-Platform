@@ -1,263 +1,72 @@
-# Live Auction Platform
+# LuxeAuction: Enterprise Live Auction Platform
 
-A full-stack real-time auction platform where users can create auctions, place live bids, and securely complete transactions using an escrow-based payment workflow. The platform supports instant bid updates using WebSockets and includes an automatic proxy bidding system similar to popular e-commerce auction platforms.
+LuxeAuction is a premium, real-time bidding platform designed for luxury collectibles, featuring a robust proxy-bidding system, secure Stripe escrow payments, and a high-end Glassmorphism UI.
 
----
+## 🚀 Features
 
-# Features
+- **Real-time Bidding**: Powered by Socket.io for instant synchronization across all connected clients.
+- **Proxy Bidding System**: Automatic auto-increment system that bids on your behalf up to your maximum limit.
+- **Secure Escrow**: Integrated Stripe payments with a hold-and-release workflow to protect both buyers and sellers.
+- **Enterprise UI**: Built with React, Tailwind CSS, and Framer Motion for a stunning, smooth, and professional experience.
+- **Role-based Dashboards**: Custom interfaces for Bidders, Sellers, and Admins.
+- **JSP Certificates**: Dynamically generated certificates and receipts for auction winners.
+- **Analytics**: Beautiful charts showing bidding trends and revenue.
 
-* Real-time live bidding using Socket.io
-* Proxy bidding system with automatic bid increments
-* Auction countdown timer
-* Secure escrow payment workflow using Stripe
-* Seller dashboard for managing auction items
-* Bidder dashboard with bidding history
-* Live bid feed updates for all connected users
-* Auction result certificate generation
-* Payment receipt generation using JSP
-* Responsive and modern React UI
-* MongoDB database integration for storing auctions, bids, users, and payments
+## 🛠 Tech Stack
 
----
+- **Frontend**: React.js, Vite, Tailwind CSS, Framer Motion, Redux Toolkit, Lucide React, Recharts.
+- **Backend**: Node.js, Express.js, Socket.io, Mongoose, JWT, bcrypt, Stripe API, Node-Cron.
+- **Database**: MongoDB (Atlas or Local).
+- **Other**: JSP (Java Server Pages) for official documents.
 
-# Tech Stack
+## 📦 Installation
 
-## Frontend
+### Prerequisites
+- Node.js (v16+)
+- MongoDB (Running locally or a connection string)
+- Stripe Account (for API keys)
 
-* React JS
-* HTML5
-* CSS3
-* JavaScript
-
-## Backend
-
-* Node.js
-* Express.js
-* Socket.io
-
-## Database
-
-* MongoDB
-
-## Payment Integration
-
-* Stripe API
-
-## Additional Technologies
-
-* JSP for auction certificates and receipts
-* JWT Authentication
-* REST APIs
-
----
-
-# System Modules
-
-## User Authentication
-
-* User registration and login
-* JWT-based authentication
-* Role-based access for sellers and bidders
-
-## Auction Management
-
-* Sellers can create auctions
-* Upload item details and images
-* Set starting price and auction duration
-* Manage active and completed auctions
-
-## Live Bidding System
-
-* Real-time bid updates using WebSockets
-* Current highest bid displayed instantly
-* Bid validation to prevent invalid bids
-* Live auction room with countdown timer
-
-## Proxy Bidding
-
-* Users can set a maximum bid amount
-* System automatically increases bids on behalf of users
-* Ensures competitive bidding without manual intervention
-
-## Escrow Payment System
-
-* Winning bidder makes payment through Stripe
-* Payment is held securely in escrow
-* Funds released to seller after delivery confirmation
-
-## Auction Result & Receipt
-
-* Auction winner certificate generation
-* JSP-based payment receipt page
-* Downloadable transaction proof
-
----
-
-# Project Architecture
-
-```
-
-Client (React JS)
-        |
-        v
-Express.js + Node.js Server
-        |
-        |---- Socket.io (Real-Time Communication)
-        |
-        |---- Stripe Payment Gateway
-        |
-        v
-MongoDB Database
-
-```
-
----
-
-# Installation and Setup
-
-## Clone the Repository
-
+### 1. Backend Setup
 ```bash
-git clone https://github.com/Sahithi-oss/live-auction-platform.git
-```
-
-## Navigate to the Project Folder
-
-```bash
-cd live-auction-platform
-```
-
-## Install Backend Dependencies
-
-```bash
+cd backend
 npm install
+# Create a .env file based on the example below
+npm start
 ```
 
-## Install Frontend Dependencies
-
+### 2. Frontend Setup
 ```bash
-cd client
+cd frontend
 npm install
+npm run dev
 ```
 
----
-
-# Environment Variables
-
-Create a `.env` file in the root directory and add:
-
+### 3. Environment Variables (`.env` in /backend)
 ```env
-MONGO_URI=your_mongodb_connection
-JWT_SECRET=your_jwt_secret
-STRIPE_SECRET_KEY=your_stripe_secret_key
 PORT=5000
+MONGODB_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+STRIPE_SECRET_KEY=your_stripe_key
+FRONTEND_URL=http://localhost:5173
 ```
 
----
+## 📜 Proxy Bidding Logic
+The system uses a recursive auto-bid algorithm:
+1. When a manual bid is placed, the system checks for any active proxy bids.
+2. If a proxy bid's maximum limit is higher than the new bid, it automatically places a bid at `newBid + increment`.
+3. If multiple proxy bids are active, they will compete automatically until only one remains within their limit.
 
-# Running the Project
+## 🛡 Escrow Workflow
+1. **Auction Ends**: The winner is notified.
+2. **Payment**: Winner pays into a Stripe Escrow (Held status).
+3. **Shipping**: Seller is notified and ships the item.
+4. **Delivery**: Buyer confirms receipt.
+5. **Release**: Funds are released to the seller's balance.
 
-## Start Backend Server
+## 📂 Project Structure
+- `/backend`: Express API, Sockets, and Services.
+- `/frontend`: React application with Tailwind CSS.
+- `/jsp`: Standalone JSP templates for certificates and invoices.
 
-```bash
-npm start
-```
-
-## Start Frontend
-
-```bash
-cd client
-npm start
-```
-
----
-
-# Real-Time Auction Workflow
-
-1. Seller creates an auction item.
-2. Auction becomes visible to all users.
-3. Bidders join the auction room.
-4. Users place bids in real time.
-5. Socket.io broadcasts updated bids instantly.
-6. Proxy bid system auto-increments bids when necessary.
-7. Auction timer ends automatically.
-8. Highest bidder wins the auction.
-9. Winner completes payment through Stripe.
-10. Payment stays in escrow until delivery confirmation.
-11. Seller receives funds after successful confirmation.
-
----
-
-# Database Collections
-
-## Users
-
-* User information
-* Authentication details
-* Role management
-
-## Auctions
-
-* Item details
-* Starting price
-* Current highest bid
-* Auction status
-* End time
-
-## Bids
-
-* Bid history
-* Bidder information
-* Bid timestamps
-
-## Proxy Bids
-
-* Maximum bid settings
-* Auto-increment logic
-
-## Escrow Payments
-
-* Payment records
-* Transaction status
-* Release confirmation
-
----
-
-# Future Enhancements
-
-* AI-based bid prediction system
-* Multi-language support
-* Mobile application support
-* Fraud detection using machine learning
-* Video-based live auction streaming
-* Admin analytics dashboard
-* Email and SMS notifications
-* Blockchain-based transaction verification
-
----
-
-
-
-
-# Learning Outcomes
-
-* Real-time communication using Socket.io
-* Full-stack MERN application development
-* Payment gateway integration
-* Secure authentication and authorization
-* WebSocket-based event handling
-* Database schema design
-* Escrow workflow implementation
-
----
-
-# Contributors
-
-* Sahithi Gunturu
-
-
----
-
-# License
-
-This project is developed for educational and academic purposes.
+## 📄 License
+MIT License. Built for Portfolio Showcase 2026.
